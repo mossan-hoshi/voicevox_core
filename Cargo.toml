@@ -120,9 +120,11 @@ voicevox_core_macros = { path = "crates/voicevox_core_macros" }
 windows = "0.43.0"
 zip = "0.6.3"
 
+# wasm32-unknown-emscripten向けのbindingsを足したフォーク。
+# upstream rev 7c87b4227bb005b439a3ad473b48ce8975829576 に1コミット足しただけ。
 [workspace.dependencies.open_jtalk]
-git = "https://github.com/VOICEVOX/open_jtalk-rs.git"
-rev = "7c87b4227bb005b439a3ad473b48ce8975829576"
+git = "https://github.com/mossan-hoshi/open_jtalk-rs.git"
+branch = "web/wasm"
 
 # FIXME: iOS対応のpull request(https://github.com/wesleywiser/process_path/pull/16)がマージされる見込みが無いため
 [workspace.dependencies.process_path]
@@ -146,4 +148,13 @@ strip = true
 
 [profile.c-api]
 inherits = "release"
+panic = "abort"
+
+# wasm32-unknown-emscripten向け。
+# `opt-level = "z"`はemscriptenだとかえって遅くなることがあるため"s"にする。
+# ASYNCIFYと`-fwasm-exceptions`は共存できないので`panic = "abort"`が必須
+# (`-Z build-std=std,panic_abort`と併用する)。
+[profile.web-release]
+inherits = "release"
+opt-level = "s"
 panic = "abort"

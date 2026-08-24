@@ -55,7 +55,7 @@ impl VoicevoxOnnxruntime {
         Ok(Self::new(inner))
     }
 
-    #[cfg(feature = "link-onnxruntime")]
+    #[cfg(any(feature = "link-onnxruntime", feature = "web-onnxruntime"))]
     pub(crate) fn init_once() -> CApiResult<&'static Self> {
         let inner = voicevox_core::blocking::Onnxruntime::init_once()?;
         Ok(Self::new(inner))

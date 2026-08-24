@@ -1,3 +1,6 @@
+// doctestはwasm32では走らせられないため、`web-onnxruntime`では不要。
+// ONNX Runtimeのロード方法がload/link版と異なるので、ビルドからも外す。
+#[cfg(not(feature = "web-onnxruntime"))]
 pub mod doctest_fixtures;
 pub mod interop;
 

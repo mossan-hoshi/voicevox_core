@@ -1,0 +1,24 @@
+[package]
+name = "voicevox_core_wasm"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+# emscripten向けのモジュール(`voicevox_core_web.js` + `voicevox_core_web.wasm`)を生成するだけの
+# パッケージ。`voicevox_core_c_api`の`cdylib`はemscriptenではSIDE_MODULEになりJSグルーが
+# 出ないため、バイナリターゲット越しにリンクする。
+[[bin]]
+name = "voicevox_core_web"
+path = "src/main.rs"
+
+[dependencies]
+# `voicevox_core_c_api`の`[lib] name`は`voicevox_core`なので、
+# 紛らわしさを避けるために`c_api`という名前で参照する。
+c_api = { path = "../voicevox_core_c_api", package = "voicevox_core_c_api", features = [
+  "web-onnxruntime",
+], default-features = false }
+
+[lints.rust]
+rust_2018_idioms = "warn"

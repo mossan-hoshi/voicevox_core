@@ -314,6 +314,12 @@
 #[cfg(all(not(doc), feature = "load-onnxruntime", feature = "link-onnxruntime"))]
 compile_error!("`load-onnxruntime` and `link-onnxruntime` cannot be enabled at the same time");
 
+#[cfg(all(not(doc), feature = "load-onnxruntime", feature = "web-onnxruntime"))]
+compile_error!("`load-onnxruntime` and `web-onnxruntime` cannot be enabled at the same time");
+
+#[cfg(all(not(doc), feature = "link-onnxruntime", feature = "web-onnxruntime"))]
+compile_error!("`link-onnxruntime` and `web-onnxruntime` cannot be enabled at the same time");
+
 #[cfg(all(not(feature = "load-onnxruntime"), feature = "link-onnxruntime"))]
 const _: () = {
     use dummy::*;

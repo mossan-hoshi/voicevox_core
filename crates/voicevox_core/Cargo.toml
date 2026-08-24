@@ -28,8 +28,11 @@ required-features = ["load-onnxruntime"]
 [features]
 default = []
 buildtime-download-onnxruntime = ["voicevox_core_build_features/download"]
-load-onnxruntime = ["ort/load-dynamic", "dep:libloading"]
-link-onnxruntime = ["voicevox_core_build_features/link"]
+load-onnxruntime = ["dep:ort", "ort/load-dynamic", "dep:libloading"]
+link-onnxruntime = ["dep:ort", "voicevox_core_build_features/link"]
+# ONNX Runtimeをリンクせず、JSブリッジ越しにonnxruntime-webへ推論を委譲する。
+# `wasm32-unknown-emscripten`専用。
+web-onnxruntime = []
 
 [dependencies]
 anyhow.workspace = true
@@ -61,7 +64,7 @@ num-bigint.workspace = true
 num-traits.workspace = true
 once_cell.workspace = true
 open_jtalk.workspace = true
-ort = { workspace = true, features = ["std", "ndarray", "tracing", "api-17", "alternative-backend"], default-features = false }
+ort = { workspace = true, features = ["std", "ndarray", "tracing", "api-17", "alternative-backend"], default-features = false, optional = true }
 ouroboros.workspace = true
 pastey.workspace = true
 phf = { workspace = true, features = ["macros"] }

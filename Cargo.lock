@@ -2758,7 +2758,7 @@ dependencies = [
 [[package]]
 name = "open_jtalk"
 version = "0.1.25"
-source = "git+https://github.com/VOICEVOX/open_jtalk-rs.git?rev=7c87b4227bb005b439a3ad473b48ce8975829576#7c87b4227bb005b439a3ad473b48ce8975829576"
+source = "git+https://github.com/mossan-hoshi/open_jtalk-rs.git?branch=web%2Fwasm#1a49f6eaf499b573208f68e9c6b3323be8d2fc5f"
 dependencies = [
  "camino",
  "open_jtalk-sys",
@@ -2768,7 +2768,7 @@ dependencies = [
 [[package]]
 name = "open_jtalk-sys"
 version = "0.16.111"
-source = "git+https://github.com/VOICEVOX/open_jtalk-rs.git?rev=7c87b4227bb005b439a3ad473b48ce8975829576#7c87b4227bb005b439a3ad473b48ce8975829576"
+source = "git+https://github.com/mossan-hoshi/open_jtalk-rs.git?branch=web%2Fwasm#1a49f6eaf499b573208f68e9c6b3323be8d2fc5f"
 dependencies = [
  "bindgen 0.70.1",
  "cmake",
@@ -5181,6 +5181,13 @@ dependencies = [
  "uuid",
  "voicevox_core",
  "voicevox_core_macros",
+]
+
+[[package]]
+name = "voicevox_core_wasm"
+version = "0.0.0"
+dependencies = [
+ "voicevox_core_c_api",
 ]
 
 [[package]]

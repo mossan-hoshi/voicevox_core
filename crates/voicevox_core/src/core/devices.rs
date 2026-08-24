@@ -114,14 +114,15 @@ impl SupportedDevices {
             cuda: true,
             dml: true,
         }
-    } else if cfg!(feature = "link-onnxruntime") {
+    } else if cfg!(any(feature = "link-onnxruntime", feature = "web-onnxruntime")) {
+        // `web-onnxruntime`ではWASM実行プロバイダ(CPU)のみ。
         Self {
             cpu: true,
             cuda: false,
             dml: false,
         }
     } else {
-        panic!("either `load-onnxruntime` or `link-onnxruntime` must be enabled");
+        panic!("either `load-onnxruntime`, `link-onnxruntime` or `web-onnxruntime` must be enabled");
     };
 }
 
