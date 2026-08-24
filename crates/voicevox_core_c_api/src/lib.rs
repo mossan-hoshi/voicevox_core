@@ -6,13 +6,16 @@
 
 mod c_impls;
 /// cbindgen:ignore
-#[cfg(feature = "load-onnxruntime")]
+#[cfg(all(feature = "load-onnxruntime", not(target_os = "emscripten")))]
 mod compatible_engine;
 mod drop_check;
 mod helpers;
 mod object;
 mod result_code;
 mod slice_owner;
+/// cbindgen:ignore
+#[cfg(target_os = "emscripten")]
+mod wasm;
 
 use self::drop_check::C_STRING_DROP_CHECKER;
 use self::helpers::{
@@ -82,7 +85,16 @@ fn init_logger_once() {
     fn local_time(wtr: &mut Writer<'_>) -> fmt::Result {
         // ローカル時刻で表示はするが、そのフォーマットはtracing-subscriber本来のものに近いようにする。
         // https://github.com/tokio-rs/tracing/blob/tracing-subscriber-0.3.16/tracing-subscriber/src/fmt/time/datetime.rs#L235-L241
-        wtr.write_str(&chrono::Local::now().to_rfc3339_opts(SecondsFormat::Micros, false))
+
+        // emscriptenでは`chrono::Local`がiana-time-zone越しにwasm-bindgenを呼び、
+        // 「cannot call wasm-bindgen imported functions on non-wasm targets」でパニックする。
+        // ブラウザのコンソールに出す分にはUTCで困らない。
+        #[cfg(target_os = "emscripten")]
+        let now = chrono::Utc::now();
+        #[cfg(not(target_os = "emscripten"))]
+        let now = chrono::Local::now();
+
+        wtr.write_str(&now.to_rfc3339_opts(SecondsFormat::Micros, false))
     }
 
     fn out() -> impl RawStream {
@@ -288,7 +300,7 @@ pub unsafe extern "C" fn voicevox_onnxruntime_load_once(
 /// }
 ///
 /// \orig-impl{voicevox_onnxruntime_init_once}
-#[cfg(feature = "link-onnxruntime")]
+#[cfg(any(feature = "link-onnxruntime", feature = "web-onnxruntime"))]
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn voicevox_onnxruntime_init_once(
     out_onnxruntime: NonNull<&'static VoicevoxOnnxruntime>,
