@@ -1,7 +1,13 @@
 use std::{env, sync::LazyLock};
 
-#[cfg(not(any(feature = "load-onnxruntime", feature = "link-onnxruntime")))]
-compile_error!("either `load-onnxruntime` or `link-onnxruntime` must be enabled");
+#[cfg(not(any(
+    feature = "load-onnxruntime",
+    feature = "link-onnxruntime",
+    feature = "web-onnxruntime"
+)))]
+compile_error!(
+    "either `load-onnxruntime`, `link-onnxruntime` or `web-onnxruntime` must be enabled"
+);
 
 const ENV_DOWNLOAD_AND_COPY_ORT: &str = "VVCORE_BUILD_DOWNLOAD_AND_COPY_ORT";
 const ENV_TARGET_ENV: &str = "CARGO_CFG_TARGET_ENV";
